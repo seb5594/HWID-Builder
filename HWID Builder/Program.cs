@@ -39,10 +39,10 @@ namespace HWID_Builder
 
         public HWID()
         {
-            Bios = GetWMIIdent("Win32_BIOS", new String[] { "Manufacturer", "SMBIOSBIOSVersion", "IdentificationCode" });
-            CPU = GetWMIIdent("Win32_Processor", new String[] { "ProcessorId", "Name" });
-            GPU = GetWMIIdent("Win32_VideoController", new String[] { "DriverVersion", "Name" });
-            HDD = GetWMIIdent("Win32_DiskDrive", new String[] { "Model", "TotalHeads" });
+            Bios = GetWMIIdent("Win32_BIOS", "Manufacturer", "SMBIOSBIOSVersion", "IdentificationCode");
+            CPU = GetWMIIdent("Win32_Processor", "ProcessorId", "Name");
+            GPU = GetWMIIdent("Win32_VideoController", "DriverVersion", "Name");
+            HDD = GetWMIIdent("Win32_DiskDrive", "Model", "TotalHeads");
             MAC = GetWMIIdent("Win32_NetworkAdapterConfiguration", "MACAddress");
             HardwareID = Build();
         }
@@ -91,7 +91,7 @@ namespace HWID_Builder
             return ident;
         }
 
-        private static String GetWMIIdent(String Class, String[] Propertys)
+        private static String GetWMIIdent(String Class, params String[] Propertys)
         {
             var ident = "";
             Array.ForEach(Propertys, prop => ident += GetWMIIdent(Class, prop) + " ");
