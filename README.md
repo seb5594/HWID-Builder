@@ -3,7 +3,11 @@ A small C# console application to create a unique hardware hash. Requires .NET F
 
 Following details are used in order to calculate a id
 • Bios
+
 • CPU
+
 • GPU
+
 • HDD
+
 • MAC
