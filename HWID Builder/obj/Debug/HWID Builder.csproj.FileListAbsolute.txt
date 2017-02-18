@@ -1,0 +1,6 @@
+c:\users\seb5594\documents\visual studio 2015\Projects\HWID Builder\HWID Builder\bin\Debug\HWID Builder.exe.config
+c:\users\seb5594\documents\visual studio 2015\Projects\HWID Builder\HWID Builder\bin\Debug\HWID Builder.exe
+c:\users\seb5594\documents\visual studio 2015\Projects\HWID Builder\HWID Builder\bin\Debug\HWID Builder.pdb
+c:\users\seb5594\documents\visual studio 2015\Projects\HWID Builder\HWID Builder\obj\Debug\HWID Builder.csprojResolveAssemblyReference.cache
+c:\users\seb5594\documents\visual studio 2015\Projects\HWID Builder\HWID Builder\obj\Debug\HWID Builder.exe
+c:\users\seb5594\documents\visual studio 2015\Projects\HWID Builder\HWID Builder\obj\Debug\HWID Builder.pdb
