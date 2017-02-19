@@ -30,32 +30,44 @@ namespace HWID_Builder
 
     class HWID
     {
-        String Bios { get; set; }
+        Boolean IsServer { get; set; }
+        String BIOS { get; set; }
         String CPU { get; set; }
-        String GPU { get; set; }
         String HDD { get; set; }
+        String GPU { get; set; }
         String MAC { get; set; }
         String HardwareID { get; set; }
+        String OS { get; set; }
+        String SCSI { get; set; }
 
         public HWID()
         {
-            Bios = GetWMIIdent("Win32_BIOS", "Manufacturer", "SMBIOSBIOSVersion", "IdentificationCode");
-            CPU = GetWMIIdent("Win32_Processor", "ProcessorId", "Name");
-            GPU = GetWMIIdent("Win32_VideoController", "DriverVersion", "Name");
-            HDD = GetWMIIdent("Win32_DiskDrive", "Model", "TotalHeads");
-            MAC = GetWMIIdent("Win32_NetworkAdapterConfiguration", "MACAddress");
+            BIOS = GetWMIIdent("Win32_BIOS", "Manufacturer", "SMBIOSBIOSVersion", "IdentificationCode");
+            CPU  = GetWMIIdent("Win32_Processor", "ProcessorId", "UniqueId", "Name");
+            HDD  = GetWMIIdent("Win32_DiskDrive", "Model", "TotalHeads");
+            GPU  = GetWMIIdent("Win32_VideoController", "DriverVersion", "Name");
+            MAC  = GetWMIIdent("Win32_NetworkAdapterConfiguration", "MACAddress");
+            OS   = GetWMIIdent("Win32_OperatingSystem", "SerialNumber", "Name");
+            SCSI = GetWMIIdent("Win32_SCSIController", "DeviceID", "Name");
+
+            // checking if system is a server. scsi indicates a server system
+            IsServer = HDD.Contains("SCSI");
+
             HardwareID = Build();
         }
 
         private String Build()
         {
-            var tmp = String.Concat(Bios, CPU, GPU, HDD, MAC);
+            var tmp = String.Concat(BIOS, CPU, HDD, GPU, MAC, SCSI);
 
             if (tmp == null)
                 Console.WriteLine("Could not resolve hardware informations...");
 
             return Convert.ToBase64String(new System.Security.Cryptography.SHA1CryptoServiceProvider().ComputeHash(Encoding.Default.GetBytes(tmp)));
         }
+
+        private Boolean IsWinServer()
+            => OS.Contains("Microsoft Windows Server");
 
         [DllImport("user32.dll")]
         internal static extern bool OpenClipboard(IntPtr hWndNewOwner);
@@ -77,7 +89,7 @@ namespace HWID_Builder
         }
 
         public override String ToString()
-            => String.Format("Bios\t\t - \t{0}\nCPU\t\t - \t{1}\nGPU\t\t - \t{2}\nHDD\t\t - \t{3}\nMAC\t\t - \t{4}\n\nGenerated Hardware ID:\n{5}\n", Bios, CPU, GPU, HDD, MAC, HardwareID);
+            => String.Format("BIOS\t\t - \t{0}\nCPU\t\t - \t{1}\nGPU\t\t - \t{2}\nMAC\t\t - \t{3}\nOS\t\t - \t{4}\n" + (IsServer ? "SCSI\t\t - \t{5}\n" : "") + "\nGenerated Hardware ID:\n{6}\n", BIOS, CPU, GPU, MAC, OS, SCSI, HardwareID);
 
         private static String GetWMIIdent(String Class, String Property)
         {
